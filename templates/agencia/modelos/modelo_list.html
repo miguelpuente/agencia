@@ -1,0 +1,9 @@
+{% extends "agencia/base.html" %}
+
+{% block content %}
+    <ul>
+        {% for modelo in modelos %}
+            <li><a href="{% url 'modelo_detail' modelo.pk %}">{{ modelo.nombre }} </a></li>
+        {% endfor %}
+    </ul>    
+{% endblock %}
