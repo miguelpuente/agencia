@@ -3,6 +3,7 @@ from .views import (
     ModeloListView, ModeloDetailView, ModeloCreateView, ModeloUpdateView, ModeloDeleteView,
     MarcaListView, MarcaDetailView, MarcaCreateView, MarcaUpdateView, MarcaDeleteView,
     MarcaModeloListView, MarcaModeloDetailView, MarcaModeloCreateView, MarcaModeloUpdateView, MarcaModeloDeleteView,
+    AutoListView, AutoDetailView, AutoCreateView, AutoUpdateView, AutoDeleteView,
     )
 
 urlpatterns = [
@@ -31,4 +32,11 @@ urlpatterns = [
          MarcaModeloUpdateView.as_view(), name='marca_modelo_update'),
     path('marca-modelo/<int:pk>/delete/',
          MarcaModeloDeleteView.as_view(), name='marca_modelo_delete'),
+
+     # Rutas para el modelo Auto
+    path('auto/list/', AutoListView.as_view(), name='auto_list'),
+    path('auto/<int:pk>/', AutoDetailView.as_view(), name='auto_detail'),
+    path('auto/create/', AutoCreateView.as_view(), name='auto_create'),
+    path('auto/<int:pk>/update/', AutoUpdateView.as_view(), name='auto_update'),
+    path('auto/<int:pk>/delete/', AutoDeleteView.as_view(), name='auto_delete'),
 ]

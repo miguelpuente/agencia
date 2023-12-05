@@ -1,3 +1,4 @@
+import os
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Modelo, Marca, MarcaModelo, Auto
@@ -104,4 +105,71 @@ class MarcaModeloDeleteView(DeleteView):
     model = MarcaModelo
     template_name = 'agencia/marcasmodelos/marca_modelo_confirm_delete.html'
     success_url = reverse_lazy('marca_modelo_list')
+
+
+# CRUD Auto
+
+
+class AutoListView(ListView):
+    model = Auto
+    template_name = 'agencia/autos/auto_list.html'
+    context_object_name = 'autos'
+
+
+class AutoDetailView(DetailView):
+    model = Auto
+    template_name = 'agencia/autos/auto_detail.html'
+    context_object_name = 'auto'
+
+
+class AutoCreateView(CreateView):
+    model = Auto
+    template_name = 'agencia/autos/auto_form.html'
+    context_object_name = 'auto'
+    fields = '__all__'
+    success_url = reverse_lazy('auto_list')
+
+
+class AutoUpdateView(UpdateView):
+    model = Auto
+    template_name = 'agencia/autos/auto_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('auto_list')
+
+
+class AutoDeleteView(DeleteView):
+    model = Auto
+    template_name = 'agencia/autos/auto_confirm_delete.html'
+    success_url = reverse_lazy('auto_list')
+
+    def form_valid(self, form):
+        # Obtener el objeto Auto
+        auto = self.get_object()
+
+        # Eliminar la imagen adociada
+        if auto.imagen:
+            # Obtener la ruta completa del archivo de imagen
+            image_path = auto.imagen.path
+
+            # Verificar si el archivo existe y eliminarlo
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+        return super().form_valid(form)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
