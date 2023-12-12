@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'ckeditor',
     'apps.agencia',
     'apps.users',
@@ -69,7 +70,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('BD_NAME'),
+        'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
@@ -104,7 +105,7 @@ LANGUAGE_CODE = 'es-ar'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
-USE_I18N = True     
+USE_I18N = True
 
 USE_TZ = True
 
@@ -115,8 +116,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static',]
 STATICFILES_FINDERS = [
- 	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-	'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
 ]
 
 # Default primary key field type
@@ -133,4 +134,3 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
     },
 }
-
