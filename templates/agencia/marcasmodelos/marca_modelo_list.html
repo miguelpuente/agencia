@@ -1,9 +1,0 @@
-{% extends "agencia/base.html" %}
-
-{% block content %}
-    <ul>
-        {% for marcamodelo in marcasmodelos %}
-            <li><a href="{% url 'marca_modelo_detail' marcamodelo.pk %}">{{ marcamodelo }} </a></li>
-        {% endfor %}
-    </ul>    
-{% endblock %}
