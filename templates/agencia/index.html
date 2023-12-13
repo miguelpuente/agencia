@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 
-{% block titulo %}Detalle{% endblock titulo %}
+{% block titulo %}Inicio{% endblock titulo %}
 
 {% block contenido %}
 
@@ -25,7 +25,7 @@
                   <h4>{{ auto.marca_modelo }}</h4>
                 </a>
                 <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
+                  <li><a href="{% url "agencia:user" auto.user %}">{{ auto.user }}</a></li>
                   <li><a href="#">{{ auto.creado|date:"M Y" }}</a></li>
                   <li><a href="#">12 Comments</a></li>
                 </ul>
@@ -59,11 +59,11 @@
                         <h4>{{ auto.marca_modelo }}</h4>
                       </a>
                       <ul class="post-info">
-                        <li><a href="#">Admin</a></li>
+                        <li><a href="{% url "agencia:user" auto.user %}">{{ auto.user }}</a></li>
                         <li><a href="#">{{ auto.creado|date:"M Y" }}</a></li>
                         <li><a href="#">12 Comments</a></li>
                       </ul>
-                      <p>{{ auto.resumen|safe }}</p>
+                      {{ auto.resumen|safe }}
                       <div class="post-options">
                         <div class="row">
                           <div class="col-6">
@@ -169,7 +169,7 @@
 
                       <!-- Inicio Marcas-->
                       {% for marca in marcas %}
-                        <li><a href="#">{{ marca.nombre }}</a></li>
+                        <li><a href="{% url "agencia:marca" marca.id %}">{{ marca.nombre }}</a></li>
                       {% endfor %}
                       <!-- Fin Marcas-->
                   
