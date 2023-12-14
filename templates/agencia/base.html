@@ -63,7 +63,11 @@
             </a>
               <ul class="dropdown-menu text-small" style="">
                   <li><a class="dropdown-item" href="#">Hola {{ user.username|upper }}</a></li>
-                  <li><a class="dropdown-item" href="#">Crear Post</a></li>
+
+                  {% if user.groups.all.0.name == 'Colaborador' or user.groups.all.0.name == 'Administrador' %}
+                    <li><a class="dropdown-item" href="#">Cargar Auto</a></li>
+                  {% endif %}
+
                   <li><a class="dropdown-item" href="#">Perfil</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url "auth:salir" %}">Salir</a></li>

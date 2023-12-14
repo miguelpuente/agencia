@@ -1,6 +1,13 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Modelo, Marca, MarcaModelo, Auto
+from .models import Marca, Auto, Comentario
+from .forms import CrearComentarioForm
 
 
 class InicioListView(ListView):
@@ -38,7 +45,38 @@ class AutoDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['autos'] = Auto.objects.filter(visible=True)
         context['marcas'] = Marca.objects.all()
+        auto = Auto.objects.filter(url=self.slug_url_kwarg)
+        context['comentarios'] = Comentario.objects.filter(
+            visible=True, auto=self.get_object()).all()
+        context['cantidad_comentarios'] = Comentario.objects.filter(
+            visible=True, auto=self.get_object()).all().count()
         return context
+
+
+class ComentarioView(UserPassesTestMixin, View):
+    template_name = 'agencia/detalle.html'
+
+    def test_func(self):
+        allowed_groups = ['Colaborador', 'Administrador', 'Registrado']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    def post(self, request, *args, **kwargs):
+        url = request.POST.get('url')
+        auto = {
+            'user': request.user.id,
+            'perfil': request.user.perfil.id,
+            'comentario': request.POST.get('comentario'),
+            'auto': request.POST.get('auto')
+        }
+        form = CrearComentarioForm(auto)
+        if form.is_valid():
+            form.save()
+            return redirect('agencia:detalle', url=url)
+        else:
+            return HttpResponse(status=500)
 
 
 class MarcaListView(ListView):

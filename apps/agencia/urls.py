@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, AutoDetailView, MarcaListView, UserListView
+from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, AutoDetailView, ComentarioView, MarcaListView, UserListView
 
 app_name = 'apps.agencia'
 
@@ -23,6 +23,11 @@ urlpatterns = [
         route='auto/<slug:url>/',
         view=AutoDetailView.as_view(),
         name='detalle'
+    ),
+    path(
+        route='comentario/',
+        view=ComentarioView.as_view(),
+        name='comentario'
     ),
     path(
         route='marca/<int:marca_id>/',
