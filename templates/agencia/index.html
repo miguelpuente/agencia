@@ -64,15 +64,28 @@
                       {{ auto.resumen|safe }}
                       <div class="post-options">
                         <div class="row">
-                          <div class="col-6">
-                          </div>
-                          <div class="col-6">
+                          <div class="col-3">
                             <ul class="post-share">
                               <li><i class="fa fa-share-alt"></i></li>
-                              <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#"> Twitter</a></li>
+                              <li><a href="#">Facebook</a></li>
                             </ul>
                           </div>
+                            {% if user.is_authenticated %}
+                              {% if auto.user|upper == user.username|upper or user.groups.all.0.name == 'Administrador' %}
+                                <div class="col-7">
+                                  <ul class="post-share">
+                                    <li><i class="fa fa-pencil"></i></li>
+                                    <li><a href="#">Editar</a></li>
+                                  </ul>
+                                </div>
+                                <div class="col-2">
+                                  <ul class="post-share">
+                                    <li><i class="fa fa-trash"></i></li>
+                                    <li><a href="#">Eliminar</a></li>
+                                  </ul>
+                                </div>
+                              {% endif %}
+                            {% endif %}
                         </div>
                       </div>
                     </div>

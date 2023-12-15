@@ -1,13 +1,26 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Marca, Auto, Comentario
-from .forms import CrearComentarioForm
+from .forms import CrearComentarioForm, AutoForm
+
+
+class AutoCreateView(CreateView):
+    model = Auto
+    form_class = AutoForm
+    template_name = 'agencia/auto/crear_auto.html'
+    success_url = reverse_lazy('agencia:inicio')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.perfil = self.request.user.perfil
+        return super().form_valid(form)
 
 
 class InicioListView(ListView):
@@ -45,7 +58,6 @@ class AutoDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['autos'] = Auto.objects.filter(visible=True)
         context['marcas'] = Marca.objects.all()
-        auto = Auto.objects.filter(url=self.slug_url_kwarg)
         context['comentarios'] = Comentario.objects.filter(
             visible=True, auto=self.get_object()).all()
         context['cantidad_comentarios'] = Comentario.objects.filter(

@@ -22,7 +22,7 @@
       </section>
     </div>
 
-        <section class="blog-posts grid-system">
+    <section class="blog-posts grid-system">
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
@@ -39,20 +39,46 @@
                       <ul class="post-info">
                         <li><a href={% url 'agencia:user' auto.user %}>{{ auto.user }}</a></li>
                         <li><a href="#">{{ auto.creado|date:"M Y" }}</a></li>
-                        <li><a href="#">{% if cantidad_comentarios %}{{ cantidad_comentarios }} Comentarios {% endif %}</a></li>
+                        <li><a href="#">
+                          {% if cantidad_comentarios < 1 %}
+                            {{ cantidad_comentarios }} Comentario 
+                          {% else %}
+                            {{ cantidad_comentarios }} Comentarios
+                          {% endif %}
+                          </a></li>
                       </ul>
                       {{ auto.contenido|safe }}
                       <div class="post-options">
                         <div class="row">
-                          <div class="col-6">
-                          </div>
-                          <div class="col-6">
-                            <ul class="post-share">
-                              <li><i class="fa fa-share-alt"></i></li>
-                              <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#"> Twitter</a></li>
-                            </ul>
-                          </div>
+                            {% if user.is_authenticated %}
+                              {% if auto.user|upper == user.username|upper or user.groups.all.0.name == 'Administrador' %}
+                                <div class="col-3">
+                                  <ul class="post-share">
+                                    <li><i class="fa fa-arrow-left"></i></li>
+                                    <li><a href="{% url 'agencia:inicio' %}">Volver</a></li>
+                                  </ul>
+                                </div>
+                                <div class="col-7">
+                                  <ul class="post-share">
+                                    <li><i class="fa fa-pencil"></i></li>
+                                    <li><a href="#">Editar</a></li>
+                                  </ul>
+                                </div>
+                                <div class="col-2">
+                                  <ul class="post-share">
+                                    <li><i class="fa fa-trash"></i></li>
+                                    <li><a href="#">Eliminar</a></li>
+                                  </ul>
+                                </div>
+                              {% endif %}
+                            {% else %}
+                              <div class="col-3">
+                                <ul class="post-share">
+                                  <li><i class="fa fa-share-alt"></i></li>
+                                  <li><a href="">Facebook</a></li>
+                                </ul>
+                              </div>
+                            {% endif %}
                         </div>
                       </div>
                     </div>
@@ -61,14 +87,25 @@
                 <div class="col-lg-12">
                   <div class="sidebar-item comments">
                     <div class="sidebar-heading">
-                      <h2>{% if cantidad_comentarios %}{{ cantidad_comentarios }} Comentarios {% endif %}</h2>
+                      <h2>
+                        {% if cantidad_comentarios < 1 %}
+                          {{ cantidad_comentarios }} Comentario 
+                        {% else %}
+                          {{ cantidad_comentarios }} Comentarios
+                        {% endif %}
+                      </h2>
                     </div>
                     {% for comentario in comentarios %}
                     <div class="content">
                       <ul>
                         <li>
                           <div class="author-thumb">
-                            <img src="{{ comentario.perfil.imagen.url }}" alt="">
+                            {% if comentario.perfil.imagen.url and comentario.perfil.imagen.url%}
+                              <img src="{{ comentario.perfil.imagen.url }}" alt="">
+                            {% else %}
+                              <img src="{% static 'assets/images/users/users.jpg' %}" alt="">  
+                            {% endif %}
+
                           </div>
                           <div class="right-content">
                             <h4>{{ comentario.user.username }}<span>{{ comentario.creado }}</span></h4>
@@ -77,13 +114,15 @@
                           <div class="down-content">
 
                             {% if user.is_authenticated %}
-                              {% if auto.user|upper == user.username|upper %}
+                              {% if auto.user|upper == user.username|upper or comentario.user|upper == user.username|upper %}
+
                                 <div class="post-options">
                                   <ul class="post-share">
                                     <li><i class="fa fa-trash"></i></li>
                                     <li><a href="#"> Eliminar</a></li>
                                   </ul>
                                 </div>
+
                               {% endif %}
                             {% endif %}
 
@@ -98,7 +137,7 @@
                 <div class="col-lg-12">
                   <div class="sidebar-item submit-comment">
                     <div class="sidebar-heading">
-                      <h2>Your comment</h2>
+                      <h2>Tu comentario</h2>
                     </div>
                     <div class="content">
                       <form method="POST" action="{% url "agencia:comentario" %}">

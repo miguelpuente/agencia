@@ -57,30 +57,47 @@
           </ul>
           
           <div class="dropdown text-end">
-          {% if user.is_authenticated %}
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{{ user.perfil.imagen.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
-            </a>
-              <ul class="dropdown-menu text-small" style="">
-                  <li><a class="dropdown-item" href="#">Hola {{ user.username|upper }}</a></li>
 
-                  {% if user.groups.all.0.name == 'Colaborador' or user.groups.all.0.name == 'Administrador' %}
-                    <li><a class="dropdown-item" href="#">Cargar Auto</a></li>
-                  {% endif %}
+            {% if user.is_authenticated %}
 
-                  <li><a class="dropdown-item" href="#">Perfil</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url "auth:salir" %}">Salir</a></li>
-            </ul>
-          {% else %}
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{% static 'assets/images/users/users.jpg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+                {% if user.perfil.imagen and user.perfil.imagen.url %}
+
+                  <img src="{{ user.perfil.imagen.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
+
+                {% else %}
+
+                  <img src="{% static 'assets/images/users/users.jpg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+
+                {% endif %}
+
               </a>
                 <ul class="dropdown-menu text-small" style="">
-                    <li><a class="dropdown-item" href="{% url "auth:login" %}">Entrar</a></li>
-                    <li><a class="dropdown-item" href="{% url "auth:registro" %}">Registrarse</a></li>
+                    <li><a class="dropdown-item" href="#">Hola {{ user.username|upper }}</a></li>
+
+                    {% if user.groups.all.0.name == 'Colaborador' or user.groups.all.0.name == 'Administrador' %}
+
+                      <li><a class="dropdown-item" href="{% url 'agencia:carga_auto' %}">Cargar Auto</a></li>
+                      
+                    {% endif %}
+
+                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li><a class="dropdown-item" href="{% url "auth:salir" %}">Salir</a></li>
               </ul>
-          {% endif %}
+            {% else %}
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{% static 'assets/images/users/users.jpg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                  <ul class="dropdown-menu text-small" style="">
+                      <li><a class="dropdown-item" href="{% url "auth:login" %}">Entrar</a></li>
+                      <li><a class="dropdown-item" href="{% url "auth:registro" %}">Registrarse</a></li>
+                </ul>
+            {% endif %}
+
           </div>
         </div>
       </div>
@@ -108,7 +125,7 @@
           <div class="copyright-text">
             <p>Copyright 2023 Miguel Puente
 
-              | Design: <a rel="nofollow" href="https://miguelpuente.com" target="_parent">Miguel Puente</a></p>
+              | Design: <a rel="nofollow" href="https://miguelpuente.com.ar" target="_parent">Miguel Puente</a></p>
           </div>
         </div>
       </div>
