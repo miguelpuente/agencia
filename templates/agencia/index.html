@@ -75,13 +75,13 @@
                                 <div class="col-7">
                                   <ul class="post-share">
                                     <li><i class="fa fa-pencil"></i></li>
-                                    <li><a href="#">Editar</a></li>
+                                    <li><a href="{% url "agencia:actualizar_auto" auto.url %}">Editar</a></li>
                                   </ul>
                                 </div>
                                 <div class="col-2">
                                   <ul class="post-share">
                                     <li><i class="fa fa-trash"></i></li>
-                                    <li><a href="#">Eliminar</a></li>
+                                    <li><a href="{% url "agencia:eliminar_auto" auto.url %}">Eliminar</a></li>
                                   </ul>
                                 </div>
                               {% endif %}

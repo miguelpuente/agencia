@@ -6,7 +6,6 @@ from ckeditor.fields import RichTextField
 
 from apps.users.models import Perfil
 
-
 class Modelo(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
 
@@ -36,6 +35,21 @@ class MarcaModelo(models.Model):
         return f'{self.marca} - {self.modelo}'
 
 class Auto(models.Model):
+    class Color(models.TextChoices):
+        BLANCO = 'BLA', 'Blanco'
+        NEGRO = 'NEG', 'Negro'
+        ROJO = 'ROJ', 'Rojo'
+
+    class Transmision(models.TextChoices):
+        MANUAL = 'M', 'Manual'
+        AUTOMATICA = 'A', 'Automática'
+
+    class Estado(models.TextChoices):
+        DISPONIBLE = 'D','Disponible'
+        RESERVADO = 'R', 'Reservado'
+        VENDIDO = 'V', 'Vendido'
+        
+
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     perfil = models.ForeignKey(Perfil, on_delete=models.PROTECT)
     titulo = models.CharField(max_length=255, unique=True)
@@ -49,10 +63,19 @@ class Auto(models.Model):
     visible = models.BooleanField(default=True)
     anio = models.PositiveIntegerField()
     km = models.PositiveIntegerField()
-    color = models.CharField(max_length=50)
+    color = models.CharField(
+        max_length=3,
+        choices=Color.choices,
+        default=Color.BLANCO)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    transmision = models.CharField(max_length=20, default='Manual')
-    estado = models.CharField(max_length=20, default='Disponible')
+    transmision = models.CharField(
+        max_length=1,
+        choices=Transmision.choices,
+        default=Transmision.MANUAL)
+    estado = models.CharField(
+        max_length=1,
+        choices=Estado.choices,
+        default=Estado.DISPONIBLE)
     imagen = models.ImageField(upload_to='auto/imagenes/')
 
     creado = models.DateTimeField(auto_now_add=True)

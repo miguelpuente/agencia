@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, AutoDetailView, AutoCreateView, ComentarioView, MarcaListView, UserListView
+from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, AutoDetailView, AutoCreateView, AutoUpdateView, AutoDeleteView, ComentarioView, MarcaListView, UserListView
 
 app_name = 'apps.agencia'
 
@@ -28,6 +28,16 @@ urlpatterns = [
         route='carga_auto/',
         view=AutoCreateView.as_view(),
         name='carga_auto'
+    ),
+    path(
+        route='actualizar_auto/<slug:url>/',
+        view=AutoUpdateView.as_view(),
+        name='actualizar_auto'
+    ),
+    path(
+        route='eliminar_auto/<slug:url>/',
+        view=AutoDeleteView.as_view(),
+        name='eliminar_auto'
     ),
     path(
         route='comentario/',

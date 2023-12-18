@@ -21,8 +21,37 @@ class AutoCreateView(CreateView):
         form.instance.user = self.request.user
         form.instance.perfil = self.request.user.perfil
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accion'] = 'Agregar Auto'
+        return context
+
+class AutoUpdateView(UpdateView):
+    model = Auto
+    form_class = AutoForm
+    template_name = 'agencia/auto/crear_auto.html'
+    slug_field = 'url'
+    slug_url_kwarg = 'url'
+    success_url = reverse_lazy('agencia:inicio')
 
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.perfil = self.request.user.perfil
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accion'] = 'Actualizar Auto'
+        return context
+    
+class AutoDeleteView(DeleteView):
+    model = Auto
+    slug_field = 'url'
+    slug_url_kwarg = 'url'
+    success_url = reverse_lazy('agencia:inicio')
+    
 class InicioListView(ListView):
     model = Auto
     template_name = 'agencia/index.html'
