@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, AutoDetailView, AutoCreateView, AutoUpdateView, AutoDeleteView, ComentarioView, MarcaListView, UserListView
+from .views import InicioListView, NosotrosTemplateView, ContactoFormView, ContactoTemplateView, AutoDetailView, AutoCreateView, AutoUpdateView, AutoDeleteView, ComentarioView, MarcaListView, UserListView
 
 app_name = 'apps.agencia'
 
@@ -16,8 +16,13 @@ urlpatterns = [
     ),
     path(
         route='contacto/',
-        view=ContactoTemplateView.as_view(),
+        view=ContactoFormView.as_view(),
         name='contacto'
+    ),
+    path(
+        route='contactook/',
+        view=ContactoTemplateView.as_view(),
+        name='contactook'
     ),
     path(
         route='auto/<slug:url>/',

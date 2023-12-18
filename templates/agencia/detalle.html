@@ -114,7 +114,7 @@
                           <div class="down-content">
 
                             {% if user.is_authenticated %}
-                              {% if auto.user|upper == user.username|upper or comentario.user|upper == user.username|upper %}
+                              {% if auto.user|upper == user.username|upper or comentario.user|upper == user.username|upper or user.groups.all.0.name == 'Administrador' %}
 
                                 <div class="post-options">
                                   <ul class="post-share">

@@ -6,6 +6,7 @@ from ckeditor.fields import RichTextField
 
 from apps.users.models import Perfil
 
+
 class Modelo(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
 
@@ -15,6 +16,7 @@ class Modelo(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Marca(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
 
@@ -23,7 +25,8 @@ class Marca(models.Model):
 
     def __str__(self):
         return self.nombre
-    
+
+
 class MarcaModelo(models.Model):
     modelo = models.ForeignKey(Modelo, on_delete=models.CASCADE)
     marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
@@ -33,6 +36,7 @@ class MarcaModelo(models.Model):
 
     def __str__(self):
         return f'{self.marca} - {self.modelo}'
+
 
 class Auto(models.Model):
     class Color(models.TextChoices):
@@ -45,10 +49,9 @@ class Auto(models.Model):
         AUTOMATICA = 'A', 'Automática'
 
     class Estado(models.TextChoices):
-        DISPONIBLE = 'D','Disponible'
+        DISPONIBLE = 'D', 'Disponible'
         RESERVADO = 'R', 'Reservado'
         VENDIDO = 'V', 'Vendido'
-        
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     perfil = models.ForeignKey(Perfil, on_delete=models.PROTECT)
@@ -86,7 +89,7 @@ class Auto(models.Model):
 
     def save(self, *args, **kwargs):
         self.url = slugify(self.titulo)
-        super(Auto, self).save(*args, **kwargs)     
+        super(Auto, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.marca_modelo} - {self.user.username}'
@@ -99,3 +102,12 @@ class Comentario(models.Model):
     comentario = models.CharField(max_length=5000)
     visible = models.BooleanField(default=True)
     creado = models.DateTimeField(auto_now_add=True)
+
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=70)
+    email = models.EmailField(max_length=50)
+    asunto = models.CharField(max_length=100)
+    mensaje = models.TextField()
+    creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)

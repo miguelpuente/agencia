@@ -65,13 +65,14 @@
                 {% if user.perfil.imagen and user.perfil.imagen.url %}
 
                   <img src="{{ user.perfil.imagen.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
-                  <span>{{ user.username|capfirst }} </span>
 
                 {% else %}
 
                   <img src="{% static 'assets/images/users/users.jpg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
 
                 {% endif %}
+
+                <span>{{ user.username|capfirst }} </span>
 
               </a>
                 <ul class="dropdown-menu text-small" style="">
