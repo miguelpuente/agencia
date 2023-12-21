@@ -1,7 +1,7 @@
 import os
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -131,7 +131,9 @@ class AutoDetailView(DetailView):
         return context
 
 
-class ComentarioView(UserPassesTestMixin, View):
+class ComentarioCreateView(UserPassesTestMixin, CreateView):
+    model = Comentario
+    form_class = CrearComentarioForm
     template_name = 'agencia/detalle.html'
     login_url = reverse_lazy('auth:login')
 
@@ -140,22 +142,32 @@ class ComentarioView(UserPassesTestMixin, View):
         return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos)
 
     def get(self, request, *args, **kwargs):
-        return HttpResponse(status=405)
+        return HttpResponseForbidden("Acceso denegado. Método no permitido.")
 
-    def post(self, request, *args, **kwargs):
-        url = request.POST.get('url')
-        auto = {
-            'user': request.user.id,
-            'perfil': request.user.perfil.id,
-            'comentario': request.POST.get('comentario'),
-            'auto': request.POST.get('auto')
-        }
-        form = CrearComentarioForm(auto)
-        if form.is_valid():
-            form.save()
-            return redirect('agencia:detalle', url=url)
-        else:
-            return HttpResponse(status=500)
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.perfil = self.request.user.perfil
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        url = self.request.POST.get('url')
+        return reverse_lazy('agencia:detalle', kwargs={'url': url})
+
+    def form_invalid(self, form):
+        return HttpResponseServerError("Error interno al procesar el formulario.")
+
+
+class ComentarioDeleteView(UserPassesTestMixin, DeleteView):
+    model = Comentario
+    login_url = reverse_lazy('auth:login')
+
+    def test_func(self):
+        grupos = ['Administrador']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
+
+    def get_success_url(self):
+        url = self.object.auto.url
+        return reverse_lazy('agencia:detalle', kwargs={'url': url})
 
 
 class MarcaListView(ListView):
